@@ -23,14 +23,12 @@ class Generator:
 
         return random_date.strftime("%d.%m.%Y")
 
-    def latin_string(self, min_length: int = 5, max_length: int = 15) -> str:
+    def latin_string(self, length: int = 10) -> str:
         """Генерирует случайную строку из латинских символов"""
-        length = random.randint(min_length, max_length)
         return ''.join(random.choices(self.latin_chars, k=length))
 
-    def russian_string(self, min_length: int = 5, max_length: int = 15) -> str:
+    def russian_string(self, length: int = 10) -> str:
         """Генерирует случайную строку из русских символов"""
-        length = random.randint(min_length, max_length)
         return ''.join(random.choices(self.russian_chars, k=length))
 
     def even_integer(self, min_val: int = 1, max_val: int = 100000000) -> int:
