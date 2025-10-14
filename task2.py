@@ -31,5 +31,11 @@ def simple_merge(input_folder, output_file, filter_string=None):
     logger.info(f"Удалено строк: {total_removed}")
     logger.info(f"Сохранено строк: {total_lines - total_removed}")
 
-# Пример использования:
-simple_merge("generated_files", "result.txt", "abc")
+
+def main():
+    # Пример использования:
+    simple_merge("generated_files", "result.txt", "abc")
+
+
+if __name__ == "__main__":
+    main()

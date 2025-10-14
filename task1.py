@@ -101,7 +101,7 @@ def main():
 
     # Генерация одной строки
     test_line = gen.generate_line()
-    logger.info("Пример строки:", test_line.strip())
+    logger.info(f"Пример строки: {test_line.strip()}")
 
     # Генерация одного файла
     gen.file(path + "test_data.csv", num_lines=100000)
