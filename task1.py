@@ -3,16 +3,20 @@ import os
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from typing import Union
+from config import Config
 from base_logger import logger
 
 
-class Generator:
-    def __init__(self, default_num_lines: int = 100000):
-        self.default_num_lines = default_num_lines
-        self.latin_chars = 'abcdefghijklmnopqrstuvwxyz'
-        self.russian_chars = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+constants = Config()
 
-    def date(self, years_back: int = 5) -> str:
+
+class Generator:
+    def __init__(self, default_num_lines: int = constants.DEFAULT_LINES):
+        self.default_num_lines = default_num_lines
+        self.latin_chars = constants.LATIN_CHARS
+        self.russian_chars = constants.RUSSIAN_CHARS
+
+    def date(self, years_back: int = constants.YEARS_BACK) -> str:
         """Генерирует случайную дату за указанное количество лет"""
         end_date = datetime.now()
         start_date = end_date - relativedelta(years=years_back)
@@ -23,15 +27,16 @@ class Generator:
 
         return random_date.strftime("%d.%m.%Y")
 
-    def latin_string(self, length: int = 10) -> str:
+    def latin_string(self, length: int = constants.LATIN_LENGTH) -> str:
         """Генерирует случайную строку из латинских символов"""
         return ''.join(random.choices(self.latin_chars, k=length))
 
-    def russian_string(self, length: int = 10) -> str:
+    def russian_string(self, length: int = constants.RUSSIAN_LENGTH) -> str:
         """Генерирует случайную строку из русских символов"""
         return ''.join(random.choices(self.russian_chars, k=length))
 
-    def even_integer(self, min_val: int = 1, max_val: int = 100000000) -> int:
+    def even_integer(self, min_val: int = constants.MIN_INT,
+                     max_val: int = constants.MAX_INT) -> int:
         """Генерирует случайное четное целое число в указанном диапазоне"""
         even_min = min_val if min_val % 2 == 0 else min_val + 1
         even_max = max_val if max_val % 2 == 0 else max_val - 1
@@ -41,12 +46,13 @@ class Generator:
 
         return random.randrange(even_min, even_max + 1, 2)
 
-    def float_number(self, min_val: float = 1.0, max_val: float = 20.0,
-                     decimals: int = 8) -> float:
+    def float_number(self, min_val: float = constants.MIN_FLOAT,
+                     max_val: float = constants.MAX_FLOAT,
+                     decimals: int = constants.FLOAT_DECIMALS) -> float:
         """Генерирует случайное число с плавающей точкой"""
         return round(random.uniform(min_val, max_val), decimals)
 
-    def generate_line(self, sep='||') -> str:
+    def generate_line(self, sep=constants.DELIMITER) -> str:
         """Генерирует одну строку данных"""
         date = self.date()
         latin = self.latin_string()
@@ -89,7 +95,7 @@ class Generator:
 
 
 def main():
-    path = "generated_files/"
+    path = constants.OUTPUT_DIR
     # Создание генератора
     gen = Generator()
 
