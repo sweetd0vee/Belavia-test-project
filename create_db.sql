@@ -41,13 +41,13 @@ BEGIN
 
         -- Парсинг строки (зависит от формата файла)
         -- Пример для CSV:
-        INSERT INTO imported_data (field1, field2, field3, field4, field5)
+        INSERT INTO imported_data (date_column, latin_string, russian_string, even_integer, float_number)
         VALUES (
-            split_part(current_row.line, delimiter, 1),
-            split_part(current_row.line, delimiter, 2)::INTEGER,
-            split_part(current_row.line, delimiter, 3)::DATE,
-            split_part(current_row.line, delimiter, 4)::DECIMAL,
-            split_part(current_row.line, delimiter, 5)
+            split_part(current_row.line, delimiter, 1)::DATE,
+            split_part(current_row.line, delimiter, 2),
+            split_part(current_row.line, delimiter, 3),
+            split_part(current_row.line, delimiter, 4)::INTEGER,
+            split_part(current_row.line, delimiter, 5)::DECIMAL
         );
 
         processed_rows := processed_rows + 1;
