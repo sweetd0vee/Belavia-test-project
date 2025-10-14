@@ -47,7 +47,7 @@ class Generator:
         """Генерирует случайное число с плавающей точкой"""
         return round(random.uniform(min_val, max_val), decimals)
 
-    def generate_line(self) -> str:
+    def generate_line(self, sep='||') -> str:
         """Генерирует одну строку данных"""
         date = self.date()
         latin = self.latin_string()
@@ -55,7 +55,7 @@ class Generator:
         even_int = self.even_integer()
         float_num = self.float_number()
 
-        return f"{date}||{latin}||{russian}||{even_int}||{float_num:.8f}\n"
+        return f"{date}{sep}{latin}{sep}{russian}{sep}{even_int}{sep}{float_num:.8f}\n"
 
     def file(self, filename: str, num_lines: int = None,
              show_progress: bool = True) -> None:
