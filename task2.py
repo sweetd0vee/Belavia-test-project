@@ -34,7 +34,7 @@ def simple_merge(input_folder, output_file, filter_string=None):
 
 def main():
     # Пример использования:
-    simple_merge("generated_files", "result.txt", "abc")
+    simple_merge("generated_files", "result.csv", "abc")
 
 
 if __name__ == "__main__":
