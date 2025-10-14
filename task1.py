@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from typing import Union
+from base_logger import logger
 
 
 class Generator:
@@ -69,14 +70,14 @@ class Generator:
 
         with open(filename, 'w', encoding='utf-8') as f:
             for i in range(num_lines):
-                if show_progress and i % 10000 == 0 and i > 0:
-                    print(f"Генерация {filename}: {i}/{num_lines} строк")
+                if show_progress and i % 50000 == 0 and i > 0:
+                    logger.info(f"Генерация {filename}: {i}/{num_lines} строк")
 
                 line = self.generate_line()
                 f.write(line)
 
         if show_progress:
-            print(f"Файл {filename} успешно создан с {num_lines} строками")
+            logger.info(f"Файл {filename} успешно создан с {num_lines} строками")
 
     def multiple_files(self, filenames: list, num_lines: Union[int, list] = None) -> None:
         """Генерирует несколько файлов"""
@@ -94,13 +95,7 @@ def main():
     gen = Generator()
 
     # Генерация одного файла
-    gen.file("test_data.txt", num_lines=1000)
-
-    # Генерация нескольких файлов
-    gen.multiple_files(
-        ["file1.txt", "file2.txt", "file3.txt"],
-        num_lines=[100, 500, 1000]
-    )
+    gen.file("test_data.csv", num_lines=100000)
 
     # Генерация одной строки для тестирования
     test_line = gen.generate_line()
