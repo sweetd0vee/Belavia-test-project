@@ -54,8 +54,8 @@ class Generator:
         russian = self.russian_string()
         even_int = self.even_integer()
         float_num = self.float_number()
-
-        return f"{date}{sep}{latin}{sep}{russian}{sep}{even_int}{sep}{float_num:.8f}\n"
+        result = sep.join([date, latin, russian, f"{even_int}", f"{float_num:.8f}"])
+        return f"{result}\n"
 
     def file(self, filename: str, num_lines: int = None,
              show_progress: bool = True) -> None:
