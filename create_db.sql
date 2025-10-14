@@ -41,7 +41,7 @@ BEGIN
 
         -- Парсинг строки (зависит от формата файла)
         -- Пример для CSV:
-        INSERT INTO imported_data (date_column, latin_string, russian_string, even_integer, float_number)
+        INSERT INTO generated_data (date_column, latin_string, russian_string, even_integer, float_number)
         VALUES (
             split_part(current_row.line, delimiter, 1)::DATE,
             split_part(current_row.line, delimiter, 2),
