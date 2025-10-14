@@ -91,11 +91,15 @@ class Generator:
 
 
 def main():
+    path = "generated_files/"
     # Создание генератора
     gen = Generator()
 
     # Генерация одного файла
-    gen.file("test_data.csv", num_lines=100000)
+    gen.file(path + "test_data.csv", num_lines=100000)
+
+    for i in range(100):
+        gen.file(path + f"test_{i}.csv", num_lines=100000)
 
     # Генерация одной строки для тестирования
     test_line = gen.generate_line()

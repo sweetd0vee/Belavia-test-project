@@ -31,4 +31,4 @@ def simple_merge(input_folder, output_file, filter_string=None):
     print(f"Сохранено строк: {total_lines - total_removed}")
 
 # Пример использования:
-# simple_merge("generated_files", "result.txt", "abc")
+simple_merge("generated_files", "result.txt", "abc")
