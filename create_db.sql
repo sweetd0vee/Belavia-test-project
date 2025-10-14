@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS generated_data (
 /* Процедура иморта файлов */
 CREATE OR REPLACE FUNCTION import_from_file(
     file_path TEXT,
-    delimiter CHAR DEFAULT ','
+    delimiter CHAR DEFAULT '||'
 )
 RETURNS VOID AS $$
 DECLARE
