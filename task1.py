@@ -95,15 +95,15 @@ def main():
     # Создание генератора
     gen = Generator()
 
+    # Генерация одной строки
+    test_line = gen.generate_line()
+    logger.info("Пример строки:", test_line.strip())
+
     # Генерация одного файла
     gen.file(path + "test_data.csv", num_lines=100000)
 
     for i in range(100):
         gen.file(path + f"test_{i}.csv", num_lines=100000)
-
-    # Генерация одной строки для тестирования
-    test_line = gen.generate_line()
-    print("Пример строки:", test_line.strip())
 
 
 if __name__ == "__main__":
