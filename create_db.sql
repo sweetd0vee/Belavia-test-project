@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS generated_data (
 );
 
 
-/* Процедура иморта файлов */
+-- Import files procedure
 CREATE OR REPLACE FUNCTION import_from_file(
     file_path TEXT,
     delimiter CHAR DEFAULT '||'
@@ -23,24 +23,23 @@ DECLARE
     start_time TIMESTAMP;
     end_time TIMESTAMP;
 BEGIN
-    -- Открываем файл
+    -- Open file
     OPEN file_handle FOR EXECUTE
         'COPY (SELECT row_number() over() as row_num, * FROM pg_read_file(''' || file_path || ''') AS line) TO STDOUT';
 
-    -- Получаем общее количество строк (примерно)
+    -- Caculates total number of rows
     EXECUTE 'SELECT COUNT(*) FROM pg_read_file(''' || file_path || ''') AS line'
     INTO total_rows;
 
     start_time := CURRENT_TIMESTAMP;
-    RAISE NOTICE 'Начало импорта. Всего строк: %', total_rows;
+    RAISE NOTICE 'Import started. Total number of lines: %', total_rows;
 
-    -- Основной цикл обработки
+    -- Main loop
     LOOP
         FETCH file_handle INTO current_row;
         EXIT WHEN NOT FOUND;
 
-        -- Парсинг строки (зависит от формата файла)
-        -- Пример для CSV:
+        -- String parsing
         INSERT INTO generated_data (date_column, latin_string, russian_string, even_integer, float_number)
         VALUES (
             split_part(current_row.line, delimiter, 1)::DATE,
@@ -52,9 +51,9 @@ BEGIN
 
         processed_rows := processed_rows + 1;
 
-        -- Вывод прогресса каждые 1000 строк или 1%
-        IF processed_rows % 1000 = 0 OR processed_rows % (total_rows / 100) = 0 THEN
-            RAISE NOTICE 'Обработано: % из % строк (%)',
+        -- Logging of each 5000 strings
+        IF processed_rows % 5000 = 0 OR processed_rows % (total_rows / 100) = 0 THEN
+            RAISE NOTICE 'Proccessed: % of % lines (%)',
                 processed_rows,
                 total_rows,
                 ROUND((processed_rows::DECIMAL / total_rows * 100)::NUMERIC, 2);
@@ -64,13 +63,13 @@ BEGIN
     CLOSE file_handle;
 
     end_time := CURRENT_TIMESTAMP;
-    RAISE NOTICE 'Импорт завершен. Обработано % строк за %',
+    RAISE NOTICE 'Import is finished. Proccessed % strings in %',
         processed_rows,
         end_time - start_time;
 
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE NOTICE 'Ошибка при импорте: %', SQLERRM;
+        RAISE NOTICE 'Import error: %', SQLERRM;
         IF file_handle IS NOT NULL THEN
             CLOSE file_handle;
         END IF;
@@ -78,7 +77,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-/* сумму всех целых чисел и медиану всех дробных чисел */
+-- Call function
+-- SELECT import_from_file('/Users/sweetd0ve/Work/git-sweetd0vee/Belavia-test-project/generated_files/test_0.csv', '||');
+
+
+-- calculates summ of all integers and median of all float numbers
 CREATE OR REPLACE FUNCTION calculate_statistics()
 RETURNS TABLE(total_sum BIGINT, median_value DECIMAL) AS $$
 BEGIN
@@ -91,7 +94,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- то же самое, но через select
+-- same, but with select
 select
     sum(even_integer) as total_sum
     , percentile_cont(0.5) within group (order by float_number) as median_value
