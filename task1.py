@@ -103,15 +103,11 @@ class Generator:
 
 def main():
     path = constants.OUTPUT_DIR
-    # Создание генератора
     gen = Generator()
 
-    # Генерация одной строки
-    test_line = gen.generate_line()
-    logger.info(f"String example: {test_line.strip()}")
-
-    # Генерация одного файла
-    gen.file(path + "test_data.csv", num_lines=100000)
+    # test_line = gen.generate_line()
+    # logger.info(f"String example: {test_line.strip()}")
+    # gen.file(path + "test_data.csv", num_lines=100000)
 
     for i in range(100):
         gen.file(path + f"test_{i}.csv", num_lines=100000)
