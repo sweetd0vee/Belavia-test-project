@@ -4,10 +4,10 @@ from base_logger import logger
 
 def files_merge(input_folder, output_file, filter_string=None):
     """
-    Простая функция объединения файлов
+    Merges files in input_folder
     """
     if not os.path.exists(input_folder):
-        logger.info(f"Папка '{input_folder}' не найдена!")
+        logger.info(f"Folder '{input_folder}' does not exist!")
         return
 
     files = [f for f in os.listdir(input_folder) if f.endswith('.csv')]
@@ -25,11 +25,11 @@ def files_merge(input_folder, output_file, filter_string=None):
                         continue
                     outfile.write(line)
 
-    logger.info(f"Файлы объединены!")
-    logger.info(f"Оработано файлов: {len(files)}")
-    logger.info(f"Всего строк: {total_lines}")
-    logger.info(f"Удалено строк: {total_removed}")
-    logger.info(f"Сохранено строк: {total_lines - total_removed}")
+    logger.info(f"Files are merged!")
+    logger.info(f"Proccessed files: {len(files)}")
+    logger.info(f"Total number of lines: {total_lines}")
+    logger.info(f"Number of removed lines: {total_removed}")
+    logger.info(f"Saved lines: {total_lines - total_removed}")
 
 
 def main():
