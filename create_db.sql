@@ -4,8 +4,8 @@ CREATE TABLE IF NOT EXISTS generated_data (
     latin_string VARCHAR(100),
     russian_string VARCHAR(100),
     even_integer BIGINT,
-    float_number DECIMAL(12,8)
-    -- imported_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    float_number DECIMAL(12,8),
+    imported_at TIMESTAMP --DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -92,7 +92,7 @@ $$ LANGUAGE plpgsql;
 
 
 -- то же самое, но через select
-SELECT
-    SUM(even_integer) as total_sum
-    , PERCENTILE_COUNT(0.5) WITHIN GROUP (ORDER BY float_number) as median_value
-FROM generated_data;
+select
+    sum(even_integer) as total_sum
+    , percentile_cont(0.5) within group (order by float_number) as median_value
+from generated_data;
