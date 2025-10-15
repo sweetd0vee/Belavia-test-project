@@ -54,7 +54,7 @@ BEGIN
 
         -- Вывод прогресса каждые 1000 строк или 1%
         IF processed_rows % 1000 = 0 OR processed_rows % (total_rows / 100) = 0 THEN
-            RAISE NOTICE 'Обработано: % из % строк (%%)',
+            RAISE NOTICE 'Обработано: % из % строк (%)',
                 processed_rows,
                 total_rows,
                 ROUND((processed_rows::DECIMAL / total_rows * 100)::NUMERIC, 2);
