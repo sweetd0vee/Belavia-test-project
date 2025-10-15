@@ -2,7 +2,7 @@ import os
 from base_logger import logger
 
 
-def simple_merge(input_folder, output_file, filter_string=None):
+def files_merge(input_folder, output_file, filter_string=None):
     """
     Простая функция объединения файлов
     """
@@ -11,12 +11,12 @@ def simple_merge(input_folder, output_file, filter_string=None):
         return
 
     files = [f for f in os.listdir(input_folder) if f.endswith('.csv')]
-    total_removed = 0
     total_lines = 0
+    total_removed = 0
 
     with open(output_file, 'w', encoding='utf-8') as outfile:
-        for filename in files:
-            filepath = os.path.join(input_folder, filename)
+        for f in files:
+            filepath = os.path.join(input_folder, f)
             with open(filepath, 'r', encoding='utf-8') as infile:
                 for line in infile:
                     total_lines += 1
@@ -25,8 +25,8 @@ def simple_merge(input_folder, output_file, filter_string=None):
                         continue
                     outfile.write(line)
 
-    logger.info(f"Объединение завершено!")
-    logger.info(f"Файлов обработано: {len(files)}")
+    logger.info(f"Файлы объединены!")
+    logger.info(f"Оработано файлов: {len(files)}")
     logger.info(f"Всего строк: {total_lines}")
     logger.info(f"Удалено строк: {total_removed}")
     logger.info(f"Сохранено строк: {total_lines - total_removed}")
@@ -34,7 +34,7 @@ def simple_merge(input_folder, output_file, filter_string=None):
 
 def main():
     # Пример использования:
-    simple_merge("generated_files", "result.csv", "abc")
+    files_merge("generated_files", "result.csv", "abc")
 
 
 if __name__ == "__main__":
