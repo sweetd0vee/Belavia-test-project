@@ -10,3 +10,4 @@ https://drive.google.com/file/d/1-f968O3_et-nZBDxKvu_3A9MXA0AEfWx/view?usp=shari
 
 ``pip3 install -r requirements.txt``
 
+``python3 task1.py ``
