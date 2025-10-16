@@ -7,7 +7,6 @@ from database.connection import get_db
 from database.models import ImportedData
 
 
-
 def import_file_sqlalchemy(filepath, db: Session = get_db()):
     """
     Import data from file to database using SQLAlchemy
@@ -17,7 +16,7 @@ def import_file_sqlalchemy(filepath, db: Session = get_db()):
             lines = file.readlines()
             total_lines = len(lines)
 
-            logger.info(f"Строк в файле {filepath}: {total_lines}")
+            logger.info(f"Number of lines in file {filepath}: {total_lines}")
             imported_count = 0
             for line_index, line in enumerate(lines, 1):
                 try:
@@ -43,13 +42,13 @@ def import_file_sqlalchemy(filepath, db: Session = get_db()):
                             progress = (line_index / total_lines) * 100
                             remaining = total_lines - line_index
                             logger.info(
-                                f"  Прогресс: {progress:.1f}% ({line_index}/{total_lines}), осталось: {remaining}")
+                                f"  Progress: {progress:.1f}% ({line_index}/{total_lines}), left: {remaining}")
 
                 except Exception as e:
-                    logger.error(f"Ошибка в строке {line_index}: {e}")
+                    logger.error(f"Error in string {line_index}: {e}")
                     continue
 
-        logger.info(f"\nImport completed! Imported {imported_count} rows from {total_lines} total lines")
+        logger.info(f"\nImport completed! Imported {imported_count} rows from {total_lines} total number of lines")
 
     except Exception as e:
         db.rollback()
@@ -57,7 +56,6 @@ def import_file_sqlalchemy(filepath, db: Session = get_db()):
         raise
 
 
-# Запуск
 if __name__ == "__main__":
     file_path = '/Users/sweetd0ve/Work/git-sweetd0vee/Belavia-test-project/generated_files/test_0.csv'
     import_file_sqlalchemy(file_path)
