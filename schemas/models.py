@@ -1,9 +1,9 @@
+from datetime import date, datetime
+from decimal import Decimal
 from typing import Optional
 from uuid import UUID
-from datetime import datetime, date
-from decimal import Decimal
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
 
 class ImportedData(BaseModel):

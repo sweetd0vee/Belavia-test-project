@@ -1,9 +1,9 @@
-from database.connection import Base, engine
-
-from sqlalchemy import Column, Integer, Date, String, BigInteger, DECIMAL, DateTime, Text
+from sqlalchemy import (DECIMAL, BigInteger, Column, Date, DateTime, Integer,
+                        String, Text)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
+from database.connection import Base, engine
 
 Base = declarative_base()
 

@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-
 # For local development, you can uncomment this line:
 SQLALCHEMY_DATABASE_URL = "postgresql://sweetd0ve:sweetd0ve@127.0.0.1:5432/sweetd0ve"
 

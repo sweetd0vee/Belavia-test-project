@@ -1,6 +1,7 @@
 import sqlite3
-import psycopg2
 import statistics
+
+import psycopg2
 from tqdm import tqdm
 
 
