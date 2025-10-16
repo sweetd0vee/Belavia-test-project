@@ -5,7 +5,8 @@ CREATE TABLE IF NOT EXISTS imported_data (
     russian_string VARCHAR(100),
     even_integer BIGINT,
     float_number DECIMAL(12,8),
-    imported_at TIMESTAMP --DEFAULT CURRENT_TIMESTAMP
+    filename VARCHAR,
+    imported_at TIMESTAMP -- Default current timestamp
 );
 
 
