@@ -4,10 +4,10 @@ import time
 from base_logger import logger
 from sqlalchemy.orm import Session
 from database.connection import get_db
-from schemas.models import ImportedData
+from database.models import ImportedData
 
 
-# Alternative approach using SQLAlchemy
+
 def import_file_sqlalchemy(filepath, db: Session = get_db()):
     """
     Import data from file to database using SQLAlchemy
