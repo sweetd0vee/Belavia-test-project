@@ -1,90 +1,63 @@
 import sqlite3
 import os
 import time
+from base_logger import logger
+from sqlalchemy.orm import Session
+from database.connection import get_db
+from schemas.models import ImportedData
 
 
-def simple_import_with_progress(folder_path='generated_files', db_path='data.db'):
+# Alternative approach using SQLAlchemy
+def import_file_sqlalchemy(filepath, db: Session = get_db()):
     """
-    Упрощенная версия импорта с прогресс-баром на базовых средствах
+    Import data from file to database using SQLAlchemy
     """
-
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-
-    # Создание таблицы
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS imported_data (
-        id SERIAL PRIMARY KEY,
-        random_date DATE,
-        latin_string VARCHAR(100),
-        russian_string VARCHAR(100),
-        even_integer BIGINT,
-        float_number DECIMAL(12,8),
-        file_name TEXT,
-        imported_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-    """)
-    conn.commit()
-
-    files = [f for f in os.listdir(folder_path) if f.endswith('.txt')]
-    total_files = len(files)
-    total_imported = 0
-
-    print(f"Начало импорта {total_files} файлов...")
-
-    for file_index, filename in enumerate(files, 1):
-        file_path = os.path.join(folder_path, filename)
-        file_imported = 0
-
-        with open(file_path, 'r', encoding='utf-8') as file:
+    try:
+        with open(filepath, 'r', encoding='utf-8') as file:
             lines = file.readlines()
             total_lines = len(lines)
 
-            print(f"\nФайл {file_index}/{total_files}: {filename}")
-            print(f"Строк в файле: {total_lines}")
-
+            logger.info(f"Строк в файле {filepath}: {total_lines}")
+            imported_count = 0
             for line_index, line in enumerate(lines, 1):
                 try:
-                    parts = line.strip().split(' || ')
+                    parts = line.strip().split('||')
                     if len(parts) == 5:
-                        # Конвертация даты
+                        # Convert date and prepare data
                         date_parts = parts[0].split('.')
-                        sql_date = f"{date_parts[2]}-{date_parts[1]}-{date_parts[0]}"
+                        sql_date = f"{date_parts[2]}-{date_parts[1]}-{date_parts[0]}" if len(date_parts) == 3 else None
 
-                        cursor.execute("""
-                            INSERT INTO imported_data 
-                            (random_date, latin_string, russian_string, even_integer, float_number, file_name)
-                            VALUES (?, ?, ?, ?, ?, ?)
-                        """, (sql_date, parts[1], parts[2], int(parts[3]), float(parts[4]), filename))
+                        row = ImportedData(
+                            random_date=sql_date,
+                            latin_string=parts[1],
+                            russian_string=parts[2],
+                            even_integer=parts[3],
+                            float_number=parts[4],
+                            file_name=filepath
+                        )
+                        db.add(row)
+                        db.commit()
+                        imported_count += 1
 
-                        file_imported += 1
-
-                        # Вывод прогресса каждые 1000 строк
                         if line_index % 1000 == 0:
                             progress = (line_index / total_lines) * 100
                             remaining = total_lines - line_index
-                            print(f"  Прогресс: {progress:.1f}% ({line_index}/{total_lines}), осталось: {remaining}")
+                            logger.info(
+                                f"  Прогресс: {progress:.1f}% ({line_index}/{total_lines}), осталось: {remaining}")
 
                 except Exception as e:
-                    print(f"Ошибка в строке {line_index}: {e}")
+                    logger.error(f"Ошибка в строке {line_index}: {e}")
                     continue
 
-            # Коммит после каждого файла
-            conn.commit()
+        logger.info(f"\nImport completed! Imported {imported_count} rows from {total_lines} total lines")
 
-        total_imported += file_imported
-        print(f"Импортировано из файла: {file_imported} строк")
-        print(f"Всего импортировано: {total_imported} строк")
-
-        # Прогресс по файлам
-        file_progress = (file_index / total_files) * 100
-        print(f"Общий прогресс: {file_progress:.1f}%")
-        print("-" * 50)
-
-    conn.close()
-    print(f"\nИмпорт завершен! Всего строк в базе: {total_imported}")
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Error during import: {e}")
+        raise
 
 
 # Запуск
 if __name__ == "__main__":
-    simple_import_with_progress()
+    file_path = '/Users/sweetd0ve/Work/git-sweetd0vee/Belavia-test-project/generated_files/test_0.csv'
+    import_file_sqlalchemy(file_path)
